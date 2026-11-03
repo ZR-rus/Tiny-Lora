@@ -2,43 +2,6 @@
 /////////////////////////////////////LoRa///////////////////////////////////////////////
 #include <setup_CPU.h>
 
-int main() {
-DDRB=0;  
-delay_ms(1);
-DDRB|=1<<4|1<<3|1<<2|1<<0;
-PORTB|=1<<4;
-PORTB|=1<<3;
-delay_ms(100);
-setup_sleep_ATtiny85();
-count=0;
-flag_WDT=0;
-if (!SX1278_Init())while (1) {MOSI_1;}//{LED_Blink(100);delay_ms(100);}//бесконечно мигаем LED
-else MOSI_0;  
-SX1278_WriteReg(REG_OP_MODE, MODE_SLEEP);   
-delay_ms(100);
-while(1)
- { 
-    if(flag_WDT)
-    {
-      flag_WDT=0;
-      //DDRB|=1<<4|1<<3|1<<2|1<<0;
-      //PORTB|=1<<4;
-      //PORTB|=1<<3;
-      if (SX1278_SendPacket((uint8_t*)helloMessage, messageLength))MOSI_0;        
-      SX1278_WriteReg(REG_OP_MODE, MODE_SLEEP); 
-    }
-    //PORTB=0;
-    //DDRB=0; 
-    MCUCR |= 1<<5;
-    __asm__ volatile("sleep"::);
-    MCUCR &= ~(1<<5);
- }
-}
-*/
-
-///////////////////////////Рабочая версия LoRa////////////////////////////////////
-/*
-
 int main() { 
 setup_sleep_ATtiny85();
 count=0;
@@ -61,9 +24,6 @@ while(1)
     MCUCR &= ~(1<<5);
  }
 }
- 
-
-
 
 /*
 /////////////////////////////управление семисигментниками через регистры сдвига (595)//////////////////////////// 
